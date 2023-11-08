@@ -1,0 +1,21 @@
+*
+{
+    margin: 0;
+    align-items: start;
+}
+body
+{
+    background-color: rgb(221, 221, 221);
+    color: #F5f5f5;
+}
+input
+{
+    outline: none;
+    border: none;
+    padding: 5px 10px;
+}
+button
+{
+    border: none;
+    outline: none;
+}
