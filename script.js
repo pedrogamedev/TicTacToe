@@ -1,6 +1,78 @@
-// Adicionando DOM elements
 
-// Factory Functions
+/*  Codex:
+
+    GameMaster: responsavel por criar os objetos do jogo e
+    cuida do estado do jogo
+    
+    GameTable: Cuida da posicao dos objetos no jogo da velha
+    e a sua checagem
+*/
+
+/*--- Factory Functions ---*/
+
+function createStartBtn()
+{
+    let btn = document.getElementById("#startBtn");
+
+    const enableStartBtn = () =>
+    {
+        btn.disabled = false;
+    }
+
+
+}
+
+
+//GameMaster
+
+
+function createGameMaster()
+{
+    //
+    let table = createGameTable;
+
+    // Setando variaveis
+    let curPlayer = 1;
+    let player1Wins = 0;
+    let player2Wins = 0;
+
+    // Comando para mudar o player a cada Jogada
+    const changePlayer = () =>
+    {
+        curPlayer == 1 ? 2 : 1;
+    }
+    
+    const startRound = () =>
+    {
+        curPlayer = 1;
+        table.restartTable();
+    }
+    const endRound = (player) =>
+    {
+        player == 1 ? player1Wins++ : player2Wins;
+        if(player1Wins == 5) { endGame(1) }
+        else if (player2Wins == 5) { endGame(2) }
+    }
+
+    const startGame = () =>
+    {
+        curPlayer = 1;
+        table.startTable();
+    }
+    const endGame = (player) =>
+    {
+        alert("Congratulations player "+player+" for winning!");
+        player1Wins = 0;
+        player2Wins = 0;
+
+        startBtn.enableStartBtn();
+    }
+
+}
+
+
+//GameTable
+
 
 function createGameTable()
 {
@@ -15,45 +87,81 @@ function createGameTable()
         table[i] = [];
         for(let j = 0; j<3; j++)
         {
-            table[i][j] = [createBtn(document.querySelector('#cellBtn' + curBtn))];
+            btn = document.getElementById('#cellBtn' + curBtn);
+            btn.disabled = true;
+            table[i][j] = [createCellBtn(btn)];
             curBtn++;
         }
     }
 
+    const startTable = () =>
+    {
+        for(i = 0; i<9; i++)
+        {
+            document.getElementById('#cellBtn' + curBtn).disabled = false;
+        }
+        restartTable();
+    }
+
+    const restartTable = () =>
+    {
+        for(i = 0; i<9; i++)
+        {
+            document.getElementById('#cellBtn' + curBtn).activated = false;
+        }
+    }
+
+    const checkCells = () =>
+    {
+        for(i = 0;i<3; i++)
+        {
+            if(table[i][0].player == table[i][1].player == table[i][2])
+            {
+                game.endRound(table[i][0].player);
+                return;
+            }
+        }
+        for(i = 0;i<3; i++)
+        {
+            if(table[0][j].player == table[1][j].player == table[2][j])
+            {
+                game.endRound(table[0][i].player);
+                return;
+            }
+        }
+        if(table[0][0].player == table[1][1].player == table[2][2].player ||
+        table[0][2].player == table[1][1].player == table[2][0].player)
+        {
+            game.endRound(table[1][1].player);
+            return;
+        }
+    }
 }
 
-function createBtn (dom)
+
+//CellBtn
+
+
+function createCellBtn (dom)
 {
     const domElement = dom;
     let activated = false;
+    player = 0;
 
 
     domElement.addEventListener('click', ()=>
     {
         if(!activated)
         {
+            alert("hello i work");
             activated = true;
+            player = game.curPlayer;
+            game.changePlayer();
         }
     })
 }
 
 
-function createGameMaster()
-{
-    let curPlayer = 1;
-    let player1Wins = 0;
-    let player2Wins = 0;
-
-    const changePlayer = () =>
-    {
-        curPlayer == 1 ? 2 : 1;
-    }
-
-    const player1Won = () => player1Wins++;
-    const player2Won = () => player2Wins++;
-
-
-}
-
 //Criando objetos 
 let game = createGameMaster();
+let startBtn = createStartBtn();
