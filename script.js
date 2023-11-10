@@ -12,14 +12,20 @@
 
 function createStartBtn()
 {
-    let btn = document.getElementById("#startBtn");
+    let btn = document.getElementById("startBtn");
 
     const enableStartBtn = () =>
     {
         btn.disabled = false;
     }
+    btn.addEventListener('click', ()=>
+    {
+        alert("helo world");
+        game.startGame();
+        btn.disabled = true;
+    })
 
-
+    return { enableStartBtn}
 }
 
 
@@ -29,7 +35,7 @@ function createStartBtn()
 function createGameMaster()
 {
     //
-    let table = createGameTable;
+    let table = createGameTable();
 
     // Setando variaveis
     let curPlayer = 1;
@@ -44,7 +50,6 @@ function createGameMaster()
     
     const startRound = () =>
     {
-        curPlayer = 1;
         table.restartTable();
     }
     const endRound = (player) =>
@@ -56,8 +61,8 @@ function createGameMaster()
 
     const startGame = () =>
     {
-        curPlayer = 1;
         table.startTable();
+        table.startRound();
     }
     const endGame = (player) =>
     {
@@ -67,7 +72,7 @@ function createGameMaster()
 
         startBtn.enableStartBtn();
     }
-
+    return {startRound, endRound, startGame, endGame};
 }
 
 
@@ -87,7 +92,7 @@ function createGameTable()
         table[i] = [];
         for(let j = 0; j<3; j++)
         {
-            btn = document.getElementById('#cellBtn' + curBtn);
+            btn = document.getElementById('cellBtn'+curBtn);
             btn.disabled = true;
             table[i][j] = [createCellBtn(btn)];
             curBtn++;
@@ -96,18 +101,23 @@ function createGameTable()
 
     const startTable = () =>
     {
+        curBtn = 1;
         for(i = 0; i<9; i++)
         {
-            document.getElementById('#cellBtn' + curBtn).disabled = false;
+            btn = document.getElementById('cellBtn' + curBtn);
+            btn.disabled = false;
+            curBtn++;
         }
-        restartTable();
     }
 
     const restartTable = () =>
     {
+        curBtn = 1;
         for(i = 0; i<9; i++)
         {
-            document.getElementById('#cellBtn' + curBtn).activated = false;
+            btn = document.getElementById('cellBtn' + curBtn);
+            btn.activated = false;
+            curBtn;
         }
     }
 
@@ -136,6 +146,8 @@ function createGameTable()
             return;
         }
     }
+
+    return { startTable, startTable, checkCells}
 }
 
 
