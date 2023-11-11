@@ -74,5 +74,14 @@ body
 
 #currentPlayer
 {
+    background-color: black;
+}
 
+.markedBtn:hover
+{
+    cursor: default;
+}
+.markedBtn:active
+{
+    cursor: not-allowed;
 }

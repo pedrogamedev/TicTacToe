@@ -16,13 +16,15 @@ function createStartBtn()
 
     const enableStartBtn = () =>
     {
-        btn.disabled = false;
+        btn.disabled = true;
+        btn.innerHTML = "start!";
     }
     btn.addEventListener('click', ()=>
     {
         alert("helo world");
-        game.startGame();
         btn.disabled = true;
+        btn.innerHTML = "...";
+        game.startGame();
     })
 
     return { enableStartBtn}
@@ -36,11 +38,10 @@ function createGameMaster()
 {
     //
     let table = createGameTable();
+    let playerControl = createPlayerControl();
 
     // Setando variaveis
     let curPlayer = 1;
-    let player1Wins = 0;
-    let player2Wins = 0;
 
     // Comando para mudar o player a cada Jogada
     const changePlayer = () =>
@@ -54,27 +55,67 @@ function createGameMaster()
     }
     const endRound = (player) =>
     {
-        player == 1 ? player1Wins++ : player2Wins;
-        if(player1Wins == 5) { endGame(1) }
-        else if (player2Wins == 5) { endGame(2) }
+        let temp = playerControl.updateWins(player);
+
+        if(temp)
+        {
+            endGame(player);
+        }
     }
 
     const startGame = () =>
     {
         table.startTable();
-        table.startRound();
+        startRound();
     }
     const endGame = (player) =>
     {
         alert("Congratulations player "+player+" for winning!");
-        player1Wins = 0;
-        player2Wins = 0;
-
+        playerControl.resetWins();
         startBtn.enableStartBtn();
     }
-    return {startRound, endRound, startGame, endGame};
+    return {startRound, endRound, startGame, endGame, changePlayer};
 }
 
+function createPlayerControl()
+{
+    //player 1 and 2 number of wins
+
+
+
+    let oneWins = 0;
+    let twoWins = 0;
+
+    const playerText = document.getElementById('currentPlayer');
+
+    const resetWins = () =>
+    {
+        oneWins = 0;
+        twoWins = 0;
+    }
+
+    const updateWins = (player) =>
+    {
+        player == 1 ? oneWins++ : twoWins++;
+        if(oneWins >= 5 || twoWins >= 5)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    const updateText = (player) =>
+    {
+        
+    }
+    
+
+
+    return { oneWins, twoWins, resetWins, updateWins}
+}
 
 //GameTable
 
@@ -147,7 +188,7 @@ function createGameTable()
         }
     }
 
-    return { startTable, startTable, checkCells}
+    return { startTable, restartTable, checkCells}
 }
 
 
@@ -168,6 +209,7 @@ function createCellBtn (dom)
             alert("hello i work");
             activated = true;
             player = game.curPlayer;
+            domElement.classList.add("markedBtn");
             game.changePlayer();
         }
     })
