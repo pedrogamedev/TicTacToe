@@ -77,11 +77,20 @@ body
     background-color: black;
 }
 
-.markedBtn:hover
+.markedBtn1
+{
+    background-color: aqua;
+}
+.markedBtn2
+{
+    background-color: red;
+}
+
+.activated:hover
 {
     cursor: default;
 }
-.markedBtn:active
+.activated:active
 {
     cursor: not-allowed;
 }
